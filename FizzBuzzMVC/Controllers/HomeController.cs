@@ -8,9 +8,21 @@ namespace FizzBuzzMVC.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        private readonly IProductRepository _repo;
+
+        public HomeController(IProductRepository repo)
         {
-            return View();
+            _repo = repo;
+        }
+
+        public HomeController()
+        {
+            _repo = new ProductRepository();
+        }
+        public ViewResult Index()
+        {
+            var products = _repo.GetAll();
+            return View(products);
         }
 
         public ActionResult About()
@@ -26,5 +38,25 @@ namespace FizzBuzzMVC.Controllers
 
             return View();
         }
+    }
+
+    public class ProductRepository : IProductRepository
+    {
+        public List<Product> GetAll()
+        {
+            return null;
+        }
+    }
+
+    public interface IProductRepository
+    {
+        List<Product> GetAll();
+    }
+
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
     }
 }
